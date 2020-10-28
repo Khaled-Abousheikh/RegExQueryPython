@@ -1,0 +1,54 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container py-4">
+   <div class="row">
+      <div class="col-md-8 order-md-1">
+        <h4 >RegEx</h4>
+        <hr>
+         <div>
+					<label>Regular Expression</label></br></br>
+            <input  value="{{ regex }}" type="text">
+         </div>
+         <div>
+					<label>Test String</label> </br></br>
+            <textarea name="test_str"  id="stringInput" rows="7">{{ test_str }}</textarea>
+         </div>
+         <div>
+            <label>Match Results</label>
+            <div class="card" style="box-shadow:none;border:1px solid #ced4da;border-radius: .25rem;">
+               <div class="card-body">
+                  {% if matches|length == 0 %}
+                    <span style="color:red">No matches.</span>
+                  {% else %}
+                    {% set i = namespace(a=0) %}
+                    {% if indices|length == 0 %}
+                      {{ test_str }}
+                    {% else %}
+                      {% for word in test_str -%}
+                        {%- if loop.index0 >= indices[i.a][0] and loop.index0 < (indices[i.a][1]) -%}
+                          <span style="background-color:#abeaff;color:#0286b3">
+                            {{- word -}}
+                          </span>
+                        {%- elif i.a < (indices|length) - 1 and loop.index0 == indices[i.a][1] -%}
+                          {% set i.a = i.a + 1 %}
+                          {{- word -}}
+                        {%- else %}
+                          {{- word -}}
+                        {%- endif -%}
+                      {%- endfor %}
+                    {% endif %}
+                  {% endif %}
+               </div>
+            </div>
+         </div>
+      </div>
+      <!-- scrollspy -->
+      <div class="col-md-4 order-md-2 mb-4">
+         <h4 class="d-flex justify-content-between align-items-center mb-3">
+            <span class="badge badge-secondary badge-pill">{{ matches|length }} matches found</span>
+         </h4>
+         
+      </div>
+   </div>
+</div>
+{% endblock %}
